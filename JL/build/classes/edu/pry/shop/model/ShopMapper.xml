@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.pry.shop.mapper.ShopMapper" >
+    <resultMap id="BaseResultMap" type="edu.pry.shop.model.Shop" >
+        <id column="shop_id" property="shop_id" jdbcType="INTEGER" />
+        <result column="shop_name" property="shop_name" jdbcType="VARCHAR" />
+        <result column="shop_city" property="shop_city" jdbcType="INTEGER" />
+        <result column="shop_region" property="shop_region" jdbcType="INTEGER" />
+        <result column="shop_address" property="shop_address" jdbcType="VARCHAR" />
+        <result column="shop_status" property="shop_status" jdbcType="INTEGER" />
+        <result column="shop_tel" property="shop_tel" jdbcType="VARCHAR" />
+        <result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="updateDate" property="updateDate" jdbcType="TIMESTAMP" />
+        <result column="open_time" property="open_time" jdbcType="VARCHAR" />
+        <result column="shop_img" property="shop_img" jdbcType="VARCHAR" />
+        <result column="shop_des" property="shop_des" jdbcType="VARCHAR" />
+        <result column="shop_register" property="shop_register" jdbcType="VARCHAR" />
+        <association property="user" column="shop_register" select="edu.pry.user.mapper.UserMapper.selRegisterByAccount"></association>
+        <association property="city" column="shop_city" select="edu.pry.city.mapper.CityMapper.cityById"></association>
+        <association property="region" column="shop_region" select="edu.pry.region.mapper.RegionMapper.regionById"></association>
+    </resultMap>
+    <sql id="shop_columns" >
+        shop_id, shop_name, shop_city, shop_region, shop_address,updateDate, shop_tel,shop_des, 
+        shop_status, shop_register, shop_img,shop_register,shop_status,updateDate
+    </sql>
+    <select id="shopDetail" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+       select *
+       from shop where shop_id = #{shop_id}
+    </select>
+    <delete id="delete" parameterType="java.lang.Integer" >
+        delete from shop
+        where shop_id = #{shop_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="edu.pry.shop.model.Shop" >
+        insert into shop
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="shop_id != null" >
+                shop_id,
+            </if>
+            <if test="shop_name != null" >
+                shop_name,
+            </if>
+            <if test="shop_city != null" >
+                shop_city,
+            </if>
+            <if test="shop_region != null" >
+                shop_region,
+            </if>
+            <if test="shop_status != null" >
+                shop_status,
+            </if>
+            <if test="createDate != null" >
+                createDate,
+            </if>
+            <if test="updateDate != null" >
+                updateDate,
+            </if>
+            <if test="shop_tel != null" >
+                shop_tel,
+            </if>
+            <if test="shop_des != null" >
+                shop_des,
+            </if>
+            <if test="shop_address != null" >
+                shop_address,
+            </if>
+            <if test="shop_register != null" >
+                shop_register,
+            </if>
+           
+            <if test="shop_img != null" >
+                shop_img,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="shop_id != null" >
+                #{shop_id,jdbcType=INTEGER},
+            </if>
+            <if test="shop_name != null" >
+                #{shop_name,jdbcType=VARCHAR},
+            </if>
+            <if test="shop_city != null" >
+                #{shop_city,jdbcType=INTEGER},
+            </if>
+            <if test="shop_region != null" >
+                #{shop_region,jdbcType=INTEGER},
+            </if>
+            <if test="shop_status != null" >
+                #{shop_status,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null" >
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null" >
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shop_tel != null" >
+                #{shop_tel,jdbcType=VARCHAR},
+            </if>
+            <if test="shop_des != null" >
+                #{shop_des,jdbcType=VARCHAR},
+            </if>
+            <if test="shop_address != null" >
+                #{shop_address,jdbcType=INTEGER},
+            </if>
+             <if test="shop_register != null" >
+                #{shop_register,jdbcType=VARCHAR},
+            </if>
+            <if test="shop_img != null" >
+                #{shop_img,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="edu.pry.shop.model.Shop" >
+        update shop
+        <set >
+            <if test="shop_name != null" >
+                shop_name = #{shop_name,jdbcType=VARCHAR},
+            </if>
+            <if test="shop_city != null" >
+                shop_city = #{shop_city,jdbcType=INTEGER},
+            </if>
+            <if test="shop_region != null" >
+                shop_region = #{shop_region,jdbcType=INTEGER},
+            </if>
+            <if test="shop_status != null" >
+                shop_status = #{shop_status,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null" >
+                createDate = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shop_tel!= null" >
+                shop_tel = #{shop_tel,jdbcType=VARCHAR},
+            </if>
+            <if test="shop_des != null" >
+                shop_des = #{shop_des,jdbcType=VARCHAR},
+            </if>
+            <if test="shop_status != null" >
+                shop_status = #{shop_status,jdbcType=INTEGER},
+            </if>
+            <if test="shop_address != null" >
+                shop_address = #{shop_address,jdbcType=VARCHAR},
+            </if>
+            <if test="shop_register != null" >
+                shop_register = #{shop_register,jdbcType=DATE},
+            </if>
+            <if test="updateDate != null" >
+                updateDate = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="shop_img != null" >
+                shop_img = #{shop_img,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where shop_id = #{shop_id,jdbcType=INTEGER}
+    </update>
+    <select id="shopList" parameterType="map" resultMap="BaseResultMap">
+        select * from shop 
+        <where>
+            <if test="shop.shop_name !=null and shop.shop_name!=''">
+                   and shop_name like concat('%',#{shop.shop_name},'%')
+            </if>
+            <if test="shop.shop_register !=null and shop.shop_register!=''">
+                   and shop.shop_register like concat('%',#{shop.shop_register},'%')
+            </if>
+        </where>
+         limit #{startNum},#{record}
+    </select>
+    <select id="count" parameterType="map" resultType="integer">
+        select count(*) from shop
+        <where>
+            <if test="shop.shop_name !=null and shop.shop_name!=''">
+                   and shop_name like concat('%',#{shop.shop_name},'%')
+            </if>
+            <if test="shop.shop_register !=null and shop.shop_register!=''">
+                   and shop.shop_register like concat('%',#{shop.shop_register},'%')
+            </if>
+        </where>
+    </select>
+    <select id="login" parameterType="map" resultMap="BaseResultMap">
+        select * from shop where shop_city=#{shop_city} and shop_region=#{shop_region}
+    </select>
+    <select id="selshopByAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from shop where shop_register=#{shop_register}
+    </select>
+      <update id="updateStatus" parameterType="map" >
+        update shop
+        <set >
+            shop_status =  #{shop_status,jdbcType=INTEGER},updateDate =  #{updateDate,jdbcType=TIMESTAMP}
+        </set>
+        where shop_id = #{shop_id,jdbcType=INTEGER}
+    </update>
+    
+</mapper>

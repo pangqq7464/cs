@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.pry.type.mapper.TypeMapper" >
+    <resultMap id="BaseResultMap" type="edu.pry.type.model.Type" >
+        <id column="type_id" property="type_id" jdbcType="INTEGER" />
+        <result column="type_name" property="type_name" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="type_columns" >
+        type_id, type_name
+    </sql>
+    <select id="typeList" parameterType="map" resultMap="BaseResultMap">
+        select * from type
+    </select>
+    <select id="seltypeById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from type where type_id=#{type_id}
+    </select>
+      <update id="updateStatus" parameterType="map" >
+        update shop
+        <set >
+            type_status =  #{type_status,jdbcType=INTEGER}
+        </set>
+        where type_id = #{type_id,jdbcType=INTEGER}
+    </update>
+    
+</mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.pry.common.mapper.CommonMapper" >
+    <resultMap id="BaseResultMap" type="edu.pry.common.model.Common" >
+        <id column="common_id" property="common_id" jdbcType="INTEGER" />
+        <result column="common_account" property="common_account" jdbcType="VARCHAR" />
+        <result column="common_specialty" property="common_specialty" jdbcType="INTEGER" />
+        <result column="common_time" property="common_time" jdbcType="TIMESTAMP" />
+        <result column="common_message" property="common_message" jdbcType="VARCHAR" />
+        <result column="common_img" property="common_img" jdbcType="VARCHAR" />
+        <result column="common_count" property="common_count" jdbcType="VARCHAR" />
+        <result column="common_count" property="common_count" jdbcType="INTEGER" />
+        <association property="user" column="common_account" select="edu.pry.user.mapper.UserMapper.selRegisterByAccount"></association>
+    </resultMap>
+    
+   
+    <select id="login" parameterType="map" resultMap="BaseResultMap">
+        select * from common where common_specialty=#{common_specialty} and common_common=#{common_common}
+    </select>
+    <select id="selcommonByCity" parameterType="java.lang.Integer" resultType="map">
+        select * from common where common_specialty=#{common_specialty} 
+    </select>
+    <select id="commonBySpecial" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM common WHERE common_specialty=#{common_specialty}  AND common_others IS NULL OR TRIM(common_others)='' order by common_time
+    </select>
+    <select id="commonByOthers" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from common where common_others=#{common_others} order by common_time desc
+    </select>
+    <select id="commonById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from common where common_id=#{common_id} order by common_time desc
+    </select>
+    <delete id="del" parameterType="java.lang.Integer" >
+        delete from common
+        where common_id = #{common_id,jdbcType=INTEGER}
+    </delete>
+    <update id="updateCount" parameterType="map" >
+        update common
+        <set >
+            common_count =  #{common_count,jdbcType=INTEGER}
+        </set>
+        where common_id = #{common_id,jdbcType=INTEGER}
+    </update>
+    
+   <insert id="add" parameterType="edu.pry.common.model.Common" >
+        insert into common
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="common_id != null" >
+                common_account,
+            </if>
+            <if test="common_account != null" >
+                common_account,
+            </if>
+            <if test="common_specialty != null" >
+                common_specialty,
+            </if>
+            <if test="common_time != null" >
+                common_time,
+            </if>
+            <if test="common_message != null" >
+                common_message,
+            </if>
+            <if test="common_img != null" >
+                common_img,
+            </if>
+            <if test="common_others != null" >
+                common_others,
+            </if>
+            <if test="common_count != null" >
+                common_count,
+            </if>
+        
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="common_id != null" >
+                #{common_id,jdbcType=INTEGER},
+            </if>
+            <if test="common_account != null" >
+                #{common_account,jdbcType=VARCHAR},
+            </if>
+            <if test="common_specialty != null" >
+                #{common_specialty,jdbcType=INTEGER},
+            </if>
+            <if test="common_time != null" >
+                #{common_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="common_message != null" >
+                #{common_message,jdbcType=VARCHAR},
+            </if>
+            <if test="common_img != null" >
+                #{common_img,jdbcType=TIMESTAMP},
+            </if>
+            <if test="common_others != null" >
+                #{common_others,jdbcType=INTEGER},
+            </if>
+            <if test="common_count != null" >
+                #{common_count,jdbcType=INTEGER},
+            </if>
+          
+        </trim>
+    </insert> 
+</mapper>

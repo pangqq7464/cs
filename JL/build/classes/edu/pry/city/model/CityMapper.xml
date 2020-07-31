@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.pry.city.mapper.CityMapper" >
+	<resultMap id="BaseResultMap" type="edu.pry.city.model.City" >
+        <id column="city_id" property="city_id" jdbcType="INTEGER" />
+        <result column="city_name" property="city_name" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="cityList" resultType="map">
+  		SELECT * FROM city
+  	</select>
+  	<select id="regionListByCity" resultType="String" parameterType="java.lang.Integer">
+  		SELECT * FROM region where region_city=#{region_city}
+  	</select>
+  	<select id="cityById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  		SELECT * FROM city where city_id=#{city_id}
+  	</select>
+    
+</mapper>

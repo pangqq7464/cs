@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.pry.specialty.mapper.SpecialtyMapper" >
+    <resultMap id="BaseResultMap" type="edu.pry.specialty.model.Specialty" >
+        <id column="specialty_id" property="specialty_id" jdbcType="INTEGER" />
+        <result column="specialty_name" property="specialty_name" jdbcType="VARCHAR" />
+        <result column="specialty_img" property="specialty_img" jdbcType="VARCHAR" />
+        <result column="specialty_type" property="specialty_type" jdbcType="INTEGER" />
+        <result column="specialty_localCity" property="specialty_localCity" jdbcType="INTEGER" />
+        <result column="specialty_localRegion" property="specialty_localRegion" jdbcType="INTEGER" />
+        <result column="specialty_des" property="specialty_des" jdbcType="VARCHAR" />
+        <result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="updateDate" property="updateDate" jdbcType="TIMESTAMP" />
+        <association property="type" column="specialty_type" select="edu.pry.type.mapper.TypeMapper.seltypeById"></association>
+        <association property="city" column="specialty_localCity" select="edu.pry.city.mapper.CityMapper.cityById"></association>
+        <association property="region" column="specialty_localRegion" select="edu.pry.region.mapper.RegionMapper.regionById"></association>
+    </resultMap>
+    <select id="specialtyDetail" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+       select *
+       from specialty where specialty_id = #{specialty_id}
+    </select>
+    <select id="list" resultMap="BaseResultMap" parameterType="map" >
+       select *
+       from specialty 
+        <where>
+            <if test="specialty.specialty_name !=null and specialty.specialty_name!=''">
+                   and specialty_name like concat('%',#{specialty.specialty_name},'%')
+            </if>
+            <if test="specialty.specialty_localCity!=null and specialty.specialty_localCity!=''">
+                   and specialty_localCity like concat('%',#{specialty.specialty_localCity},'%')
+            </if> 
+             <if test="specialty.specialty_localRegion!=null and specialty.specialty_localRegion!=''">
+                   and specialty_localRegion like concat('%',#{specialty.specialty_localRegion},'%')
+            </if> 
+            <if test="specialty.specialty_type!=null and specialty.specialty_type!=''">
+                   and specialty_type like concat('%',#{specialty.specialty_type},'%')
+            </if>
+        </where>
+    </select>
+    <delete id="del" parameterType="java.lang.Integer" >
+        delete from specialty
+        where specialty_id = #{specialty_id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="edu.pry.specialty.model.Specialty" >
+        insert into specialty
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="specialty_id != null" >
+                specialty_id,
+            </if>
+            <if test="specialty_name != null" >
+                specialty_name,
+            </if>
+            <if test="specialty_type != null" >
+                specialty_type,
+            </if>
+            <if test="specialty_localCity != null" >
+                specialty_localCity,
+            </if>
+            <if test="specialty_localRegion != null" >
+                specialty_localRegion,
+            </if>
+           
+            <if test="createDate != null" >
+                createDate,
+            </if>
+            <if test="updateDate != null" >
+                updateDate,
+            </if>
+          
+            <if test="specialty_des != null" >
+                specialty_des,
+            </if>
+           
+            <if test="specialty_img != null" >
+                specialty_img,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="specialty_id != null" >
+                #{specialty_id,jdbcType=INTEGER},
+            </if>
+            <if test="specialty_name != null" >
+                #{specialty_name,jdbcType=VARCHAR},
+            </if>
+            <if test="specialty_type != null" >
+                #{specialty_type,jdbcType=INTEGER},
+            </if>
+            <if test="specialty_localCity != null" >
+                #{specialty_localCity,jdbcType=INTEGER},
+            </if>
+            <if test="specialty_localRegion != null" >
+                #{specialty_localRegion,jdbcType=INTEGER},
+            </if>
+           
+            <if test="createDate != null" >
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null" >
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            
+            <if test="specialty_des != null" >
+                #{specialty_des,jdbcType=VARCHAR},
+            </if>
+            
+            <if test="specialty_img != null" >
+                #{specialty_img,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="edu.pry.specialty.model.Specialty" >
+        update specialty
+        <set >
+            <if test="specialty_name != null" >
+                specialty_name = #{specialty_name,jdbcType=VARCHAR},
+            </if>
+            <if test="specialty_type != null" >
+                specialty_type = #{specialty_type,jdbcType=INTEGER},
+            </if>
+            <if test="specialty_localCity != null" >
+                specialty_localCity = #{specialty_localCity,jdbcType=INTEGER},
+            </if>
+            <if test="specialty_localRegion != null" >
+                specialty_localRegion = #{specialty_localRegion,jdbcType=INTEGER},
+            </if>
+            <if test="specialty_des != null" >
+                specialty_des = #{specialty_des,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                updateDate = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where specialty_id = #{specialty_id,jdbcType=INTEGER}
+    </update>
+    <select id="specialtyList" parameterType="map" resultMap="BaseResultMap">
+        select * from specialty 
+        <where>
+            <if test="specialty.specialty_name !=null and specialty.specialty_name!=''">
+                   and specialty_name like concat('%',#{specialty.specialty_name},'%')
+            </if>
+            <if test="specialty.specialty_localCity!=null and specialty.specialty_localCity!=''">
+                   and specialty_localCity like concat('%',#{specialty.specialty_localCity},'%')
+            </if> 
+             <if test="specialty.specialty_localRegion!=null and specialty.specialty_localRegion!=''">
+                   and specialty_localRegion like concat('%',#{specialty.specialty_localRegion},'%')
+            </if> 
+        </where>
+         limit #{startNum},#{record}
+    </select>
+    <select id="count" parameterType="map" resultType="integer">
+        select count(*) from specialty
+        <where>
+           <if test="specialty.specialty_name !=null and specialty.specialty_name!=''">
+                   and specialty_name like concat('%',#{specialty.specialty_name},'%')
+            </if>
+             <if test="specialty.specialty_localCity!=null and specialty.specialty_localCity!=''">
+                   and specialty_localCity like concat('%',#{specialty.specialty_localCity},'%')
+            </if> 
+             <if test="specialty.specialty_localRegion!=null and specialty.specialty_localRegion!=''">
+                   and specialty_localRegion like concat('%',#{specialty.specialty_localRegion},'%')
+            </if> 
+        </where>
+    </select>
+   
+    <select id="specialtyById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from specialty where specialty_id=#{specialty_id}
+    </select>
+     
+    
+</mapper>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="edu.pry.goods.mapper.GoodsMapper" >
+    <resultMap id="BaseResultMap" type="edu.pry.goods.model.Goods" >
+        <id column="goods_id" property="goods_id" jdbcType="INTEGER" />
+        <result column="goods_name" property="goods_name" jdbcType="VARCHAR" />
+        <result column="goods_des" property="goods_des" jdbcType="VARCHAR" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="goods_img" property="goods_img" jdbcType="VARCHAR" />
+        <result column="goods_price" property="goods_price" jdbcType="INTEGER" />
+        <result column="goods_shop" property="goods_shop" jdbcType="INTEGER" />
+        <association property="shop" column="goods_shop" select="edu.pry.shop.mapper.ShopMapper.shopDetail"></association>
+        
+    </resultMap>
+    <delete id="delGoods" parameterType="java.lang.Integer" >
+        delete from goods
+        where goods_id = #{goods_id,jdbcType=INTEGER}
+    </delete>
+    <select id="selGoodsById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from goods where goods_id=#{goods_id}
+    </select>
+    <select id="selGoodsByGoodsName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from goods where goods_name like concat('%',#{goods_name},'%')
+    </select>
+    <select id="selGoodsByShop" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from goods where goods_shop=#{goods_shop}
+    </select>
+    <select id="goodsList" parameterType="map" resultType="map">
+    		SELECT 
+				g.goods_id,
+				g.goods_name,
+				g.goods_des,
+				g.goods_img,
+				g.goods_price,
+				g.createTime,
+				g.updateTime,
+				g.goods_shop,
+				s.shop_id,
+		        s.shop_name,
+		        s.shop_register,
+		        u.user_id,
+		        u.user_name,
+		        u.user_account
+        
+			FROM    goods g ,shop s,USER u
+   		<where>
+            g.goods_shop=s.shop_id
+			AND s.shop_register = u.user_account
+			AND s.shop_register = #{shop_register}
+            <if test="goods.goods_name !=null and goods.goods_name!=''">
+                   and g.goods_name like concat('%',#{goods.goods_name},'%')
+            </if>
+            <if test="goods.goods_shop !=null and goods.goods_shop!=''">
+                   and g.goods_shop like concat('%',#{goods.goods_shop},'%')
+            </if>
+        </where>
+         limit #{startNum},#{record} 
+    </select>
+    <select id="count" parameterType="map" resultType="Integer">
+       SELECT count(*) FROM goods g ,shop s,USER u
+   		<where>
+            g.goods_shop=s.shop_id
+			AND s.shop_register = u.user_account
+            <if test="goods.goods_name !=null and goods.goods_name!=''">
+                   and g.goods_name like concat('%',#{goods.goods_name},'%')
+            </if>
+            <if test="goods.goods_shop !=null and goods.goods_shop!=''">
+                   and g.goods_shop like concat('%',#{goods.goods_shop},'%')
+            </if>
+        </where>
+    </select>
+    <insert id="addGoods" parameterType="edu.pry.goods.model.Goods" >
+        insert into goods
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="goods_id != null" >
+                goods_id,
+            </if>
+            <if test="goods_name != null" >
+                goods_name,
+            </if>
+            <if test="goods_des != null" >
+                goods_des,
+            </if>
+            <if test="goods_img != null" >
+                goods_img,
+            </if>
+            <if test="goods_price != null" >
+                goods_price,
+            </if>
+            <if test="createTime != null" >
+                createTime,
+            </if>
+            <if test="updateTime != null" >
+                updateTime,
+            </if>
+            <if test="goods_shop != null" >
+                goods_shop,
+            </if>
+            
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="goods_id != null" >
+                #{goods_id ,jdbcType=INTEGER},
+            </if>
+            <if test="goods_name != null" >
+                #{goods_name,jdbcType=VARCHAR},
+            </if>
+            <if test="goods_des != null" >
+                #{goods_des,jdbcType=VARCHAR},
+            </if>
+            <if test="goods_img != null" >
+                #{goods_img,jdbcType=VARCHAR},
+            </if>
+            <if test="goods_price != null" >
+                #{goods_price,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="goods_shop != null" >
+                #{goods_shop,jdbcType=INTEGER},
+            </if>
+           
+        </trim>
+    </insert>
+     <update id="update" parameterType="edu.pry.goods.model.Goods" >
+        update goods
+        <set >
+            <if test="goods_name != null" >
+                goods_name = #{goods_name,jdbcType=VARCHAR},
+            </if>
+            <if test="goods_des != null" >
+                goods_des = #{goods_des,jdbcType=VARCHAR},
+            </if>
+            <if test="goods_img != null" >
+                goods_img = #{goods_img,jdbcType=VARCHAR},
+            </if>
+            <if test="goods_price != null" >
+                goods_price = #{goods_price,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null" >
+                createTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime!= null" >
+                updateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="goods_shop != null" >
+                goods_shop = #{goods_shop,jdbcType=INTEGER},
+            </if>
+            
+        </set>
+        where goods_id = #{goods_id,jdbcType=INTEGER}
+    </update>
+    
+    
+</mapper>
